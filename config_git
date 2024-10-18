@@ -80,7 +80,7 @@ if [ "$current_dir" != "$home_dir" ]; then
     printf "%s%sThe script must be executed from the HOME directory.%s\n" "${BLD}" "${CYE}" "${CNC}"
     exit 1
 fi
-sleep 10
+
 
 ########## ---------- Cloning the Rice! ---------- ##########
 
@@ -158,30 +158,25 @@ if [ -f ~/.gitconfig-config-depurado ]; then
     if mv ~/.gitconfig-config-depurado "$backup_folder"/.gitconfig-config-depurado_"$date" 2>> config_git_Errors.log; then
         printf "%s%s.gitconfig-config-depurado file backed up successfully at %s%s/.zshrc_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
     else
-        printf "%s%sFailed to backup .zshrc file. See %sconfig_git_Errors.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+        printf "%s%sFailed to backup .gitconfig-config-depurado file. See %sconfig_git_Errors.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
     fi
 else
-    printf "%s%sThe file .zshrc does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
+    printf "%s%sThe file .gitconfig-config-depurado does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
 fi
 
 
 ########## ---------- Copy the git_files! ---------- ##########
 
-if cp -R "$HOME/git_files/home/*" "$HOME" 2>> config_git_Errors.log; then
-    printf "%s%sGit config files %scopied succesfully!%s\n" "${BLD}" "${CYE}" "${CGR}" "${CNC}"
-    sleep 1
-else
-    printf "%s%sGit config files %sfailed to been copied, see %sconfig_git_Errors.log %sfor more details.%s\n" "${BLD}" "${CYE}" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
-    sleep 1
-fi
 
-cp -f "$HOME"/git_files/home/.czrc "$HOME"
-cp -f "$HOME"/git_files/home/.gitconfig "$HOME"
-cp -f "$HOME"/git_files/home/.gitconfig-alias "$HOME"
-cp -f "$HOME"/git_files/home/.gitconfig-config-depurado "$HOME"
-cp -f "$HOME"/git_files/home/.gitconfig-local"$HOME"
-cp -f "$HOME"/git_files/home/.git-flow-completion.zsh "$HOME"
+cp -fv "$HOME"/git_files/home/.czrc "$HOME"
+cp -fv "$HOME"/git_files/home/.gitconfig "$HOME"
+cp -fv "$HOME"/git_files/home/.gitconfig-alias "$HOME"
+cp -fv "$HOME"/git_files/home/.gitconfig-config-depurado "$HOME"
+cp -fv "$HOME"/git_files/home/.gitconfig-local"$HOME"
+cp -fv "$HOME"/git_files/home/.git-flow-completion.zsh "$HOME"
 
+printf "\n\n%s%sFiles copied succesfully!!%s\n" "${BLD}" "${CGR}" "${CNC}"
+sleep 5
 
 }
 
