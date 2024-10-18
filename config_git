@@ -34,8 +34,19 @@ function color_echo() {
     echo -e "$text\033[0m" # Restablecer estilo y color al final
 
 }
+
+logo() {
+
+    local text="${1:?}"
+    echo -en "\n\n"
+    printf ' %s [%s%s %s%s %s]%s\n\n' "${CRE}" "${CNC}" "${CYE}" "${text}" "${CNC}" "${CRE}" "${CNC}"
+}
+
+
 backup_folder=~/.git_Backup
 date=$(date +%Y%m%d-%H%M%S)
+mkdir -p $backup_folder
+rm -rf "$HOME/config_git_Errors.log"
 
 title() {
 
@@ -94,60 +105,60 @@ clear
 ########## ---------- Backup files ---------- ##########
 
 if [ -f ~/.gitconfig-local ]; then
-    if mv ~/.gitconfig-local "$backup_folder"/.gitconfig-local_"$date" 2>> RiceError.log; then
+    if mv ~/.gitconfig-local "$backup_folder"/.gitconfig-local_"$date" 2>> config_git_Errors.log; then
         printf "%s%s.gitconfig-local file backed up successfully at %s%s/.gitconfig-local_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
     else
-        printf "%s%sFailed to backup .gitconfig-local file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+        printf "%s%sFailed to backup .gitconfig-local file. See %sconfig_git_Errors.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
     fi
 else
     printf "%s%sThe file .gitconfig-local does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
 fi
 
 if [ -f ~/.git-flow-completion.zsh ]; then
-    if mv ~/.git-flow-completion.zsh "$backup_folder"/.git-flow-completion.zsh_"$date" 2>> RiceError.log; then
+    if mv ~/.git-flow-completion.zsh "$backup_folder"/.git-flow-completion.zsh_"$date" 2>> config_git_Errors.log; then
         printf "%s%s.git-flow-completion.zsh file backed up successfully at %s%s/.git-flow-completion.zsh_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
     else
-        printf "%s%sFailed to backup .git-flow-completion.zsh file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+        printf "%s%sFailed to backup .git-flow-completion.zsh file. See %sconfig_git_Errors.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
     fi
 else
     printf "%s%sThe file .git-flow-completion.zsh does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
 fi
 
 if [ -f ~/.czrc ]; then
-    if mv ~/.czrc "$backup_folder"/.czrc_"$date" 2>> RiceError.log; then
+    if mv ~/.czrc "$backup_folder"/.czrc_"$date" 2>> config_git_Errors.log; then
         printf "%s%s.czrc file backed up successfully at %s%s/.czrc_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
     else
-        printf "%s%sFailed to backup .czrc file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+        printf "%s%sFailed to backup .czrc file. See %sconfig_git_Errors.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
     fi
 else
     printf "%s%sThe file .czrc does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
 fi
 
 if [ -f ~/.gitconfig ]; then
-    if mv ~/.gitconfig "$backup_folder"/.gitconfig_"$date" 2>> RiceError.log; then
+    if mv ~/.gitconfig "$backup_folder"/.gitconfig_"$date" 2>> config_git_Errors.log; then
         printf "%s%s.gitconfig file backed up successfully at %s%s/.gitconfig_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
     else
-        printf "%s%sFailed to backup .gitconfig file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+        printf "%s%sFailed to backup .gitconfig file. See %sconfig_git_Errors.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
     fi
 else
     printf "%s%sThe file .gitconfig does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
 fi
 
 if [ -f ~/.gitconfig-alias ]; then
-    if mv ~/.gitconfig-alias "$backup_folder"/.gitconfig-alias_"$date" 2>> RiceError.log; then
+    if mv ~/.gitconfig-alias "$backup_folder"/.gitconfig-alias_"$date" 2>> config_git_Errors.log; then
         printf "%s%s.gitconfig-alias file backed up successfully at %s%s/.gitconfig-alias_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
     else
-        printf "%s%sFailed to backup .gitconfig-alias file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+        printf "%s%sFailed to backup .gitconfig-alias file. See %sconfig_git_Errors.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
     fi
 else
     printf "%s%sThe file .gitconfig-alias does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
 fi
 
 if [ -f ~/.gitconfig-config-depurado ]; then
-    if mv ~/.gitconfig-config-depurado "$backup_folder"/.gitconfig-config-depurado_"$date" 2>> RiceError.log; then
+    if mv ~/.gitconfig-config-depurado "$backup_folder"/.gitconfig-config-depurado_"$date" 2>> config_git_Errors.log; then
         printf "%s%s.gitconfig-config-depurado file backed up successfully at %s%s/.zshrc_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
     else
-        printf "%s%sFailed to backup .zshrc file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+        printf "%s%sFailed to backup .zshrc file. See %sconfig_git_Errors.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
     fi
 else
     printf "%s%sThe file .zshrc does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
@@ -156,11 +167,11 @@ fi
 
 ########## ---------- Copy the git_files! ---------- ##########
 
-if cp -R "$HOME/git_files/home/*" "$HOME" 2>> RiceError.log; then
+if cp -R "$HOME/git_files/home/*" "$HOME" 2>> config_git_Errors.log; then
     printf "%s%sGit config files %scopied succesfully!%s\n" "${BLD}" "${CYE}" "${CGR}" "${CNC}"
     sleep 1
 else
-    printf "%s%sGit config files %sfailed to been copied, see %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+    printf "%s%sGit config files %sfailed to been copied, see %sconfig_git_Errors.log %sfor more details.%s\n" "${BLD}" "${CYE}" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
     sleep 1
 fi
 
@@ -231,11 +242,11 @@ Instalar_paquetes_adicionales() {
   printf "%s%sChecking for required packages...%s\n" "${BLD}" "${CBL}" "${CNC}"
   for paquete in "${dependencias[@]}"; do
     if ! is_installed "$paquete"; then
-      if sudo pacman -S "$paquete" --noconfirm >/dev/null 2>>RiceError.log; then
+      if sudo pacman -S "$paquete" --noconfirm >/dev/null 2>>config_git_Errors.log; then
         printf "%s%s%s %shas been installed succesfully.%s\n" "${BLD}" "${CYE}" "$paquete" "${CBL}" "${CNC}"
         sleep 1
       else
-        printf "%s%s%s %shas not been installed correctly. See %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "$paquete" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+        printf "%s%s%s %shas not been installed correctly. See %sconfig_git_Errors.log %sfor more details.%s\n" "${BLD}" "${CYE}" "$paquete" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
         sleep 1
       fi
     else
