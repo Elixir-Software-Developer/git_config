@@ -175,7 +175,12 @@ else
     sleep 1
 fi
 
-
+cp -f "$HOME"/git_files/home/.czrc "$HOME"
+cp -f "$HOME"/git_files/home/.gitconfig "$HOME"
+cp -f "$HOME"/git_files/home/.gitconfig-alias "$HOME"
+cp -f "$HOME"/git_files/home/.gitconfig-config-depurado "$HOME"
+cp -f "$HOME"/git_files/home/.gitconfig-local"$HOME"
+cp -f "$HOME"/git_files/home/.git-flow-completion.zsh "$HOME"
 
 
 }
