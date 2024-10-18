@@ -1,0 +1,34 @@
+###############################################################################
+# Configuración de Git                                                        #
+###############################################################################
+
+# -----------------------------------------------------------------------------
+# Commits                                                                     #
+# -----------------------------------------------------------------------------
+[commit]
+    gpgsign = true             # Habilitar firma GPG por defecto en los commits
+
+# -----------------------------------------------------------------------------
+# Credenciales                                                                #
+# -----------------------------------------------------------------------------
+[credential]
+    helper = store              # Almacenar credenciales de forma segura
+    # helper = cache --timeout=604800   # Alternativa: cache con tiempo de espera
+
+###############################################################################
+# Configuración de GHQ                                                       #
+###############################################################################
+
+# -----------------------------------------------------------------------------
+# Directorio raíz                                                              #
+# -----------------------------------------------------------------------------
+[ghq]
+    # root = "~/.local/rf"         # Directorio raíz principal para GHQ
+    root = "~/Dropbox/"  # Directorio raíz alternativo (comentado)
+
+# -----------------------------------------------------------------------------
+# Repositorio específico (DotFiles)                                            #
+# ----------------------------------------------------------------------------
+[ghq "git@github.com:Elixir-Software-Developer/.dotfiles.git"]
+    vcs = git                            # Sistema de control de version (Git)
+    root = "$HOME/"         # Directorio raíz específico para este repositorio

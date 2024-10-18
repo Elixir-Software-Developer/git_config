@@ -1,0 +1,214 @@
+# -- Alias ------------------------------------------------------------------
+# Definición de alias para simplificar comandos de Git
+[alias]
+    # Switch to a branch, creating it if necessary
+    go = checkout -B
+    # Switch to a branch, only if it exists
+    co = checkout
+   # Show status with just the most relevant info
+    s = status -s -b
+    ############################ Commits
+    # Git add everything
+    a = add .
+    # Git commit with a message
+    cm = commit -m
+    # Git commit, add all tracked files, and a commit message
+    ca = "!git commit -am"
+    # Commit all changes
+    ce = !git add -A && git commit -av
+    ############################ Push and pull
+    # Push the current branch
+    publish = "!git push origin $(git branch-name)"
+    ps = "!git push origin $(git rev-parse --abbrev-ref HEAD)"
+    # Pull the current branch
+    pl = "!git pull origin $(git rev-parse --abbrev-ref HEAD)"
+    ############################ Logs
+    # View abbreviated SHA, description, and history graph of the latest 50 commits
+    l = log --pretty=oneline -n 50 --graph --abbrev-commit
+    lg = log --oneline --decorate --all --graph
+    # Show detailed history
+    hist = log --pretty=format:\"%Cgreen%h %Creset%cd %Cblue[%cn] %Creset%s%C(yellow)%d%C(reset)\" --graph --date=relative --decorate --all
+    # Show history with modified files
+    llog = log --graph --name-status --pretty=format:\"%C(red)%h %C(reset)(%cd) %C(green)%an %Creset%s %C(yellow)%d%Creset\" --date=relative
+    # Check signature of commits
+    logs = log --show-signature
+    ############################ Branches
+    # Show local branches
+    b = branch
+    # Show local and remote branches
+    br = branch -va
+    # Show remote branches
+    brr = branch -r
+    # Show remote branch movements
+    brm = show-branch -r
+    # Clone all branches
+    clone-branches = "!git branch -a | sed -n \"/\\/HEAD /d; /\\/master$/d; /remotes/p;\" | xargs -L1 git checkout -t"
+    # Show verbose output about tags, branches, or remotes
+    tags = tag -l
+    branches = branch -a
+    remotes = remote -v
+    # Remove branches that have already been merged with master
+    dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+    # Show branches merged into master
+    bm = branch --merged master
+    # Show branches not merged into master
+    bn = branch --no-merged master
+    ############################ Others
+    # Clone Dotfiles repo
+    do = "!rm -rf $HOME/dotfiles2 && gh repo clone FQ211776/dotfiles_arch $HOME/dotfiles2 && cd $HOME/dotfiles2 && git clone-branches && git br"
+    # Create a repo, add README, send to GitHub
+    fresh = "!git init && touch README.md && git add . && git commit -m 'And so, it begins.' && gh repo create --source=. --public && git push -u origin HEAD"
+    # List current aliases
+    aliases = "!git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ / | grep -v ^'alias '"
+    # Show user configuration
+    me = "!git config --get-regexp ^user\\. | sed -e s/^user\\.// -e s/\\ /\\ =\\ / | grep -v ^'user '"
+    # Git add with query
+    a = "!git status --short | peco | awk '{print $2}' | xargs git add"
+    # Find a commit with query and show diff after select
+    df = "!git hist | peco | awk '{print $2}' | xargs -I {} git diff {}^ {}"
+    # Show the diff between the latest commit and the current state
+    d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+    # `git di $number` shows the diff between the state `$number` revisions ago and the current state
+    di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+    ############################ hub && gh
+    gha = "!gh auth login"
+    # Open current repo in the browser
+    open = "!hub browse"
+    issues = "!hub issue --limit 20"
+    issueso = "!hub browse -- issues"
+    wiki = "!hub browse gh0stzk/dotfiles/wiki"
+    dotfiles = "!hub browse FQ211776/dotfiles_arch"
+    ############################ Advanced workflow
+    # Git save
+    # This adds all changes, including untracked files, to the staging area and then commits with a SAVEPOINT message.
+    save = !git add -A && git commit -v -m 'SAVEPOINT'
+    # Git undo
+    # This alias allows me to quickly resume work after a save or wip. It undoes the last commit but keeps its changes, with files unstaged.
+    undo = reset HEAD~1 --mixed
+    # Git wip
+    # Stages all tracked changes and then commits with a WIP message.
+    wip = !git add -u && git commit -m 'WIP'
+    # Git wipe
+    # Adds changes in the working tree to a WIPE SAVEPOINT commit, then it wipes the commit.
+    wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' --no-verify && git reset HEAD~1 --hard
+    # Git rename
+    # Adds all changes to the last commit without changing the commit message.
+    rename = !git add -A && git commit -a --amend
+    # Creating a branch before you try a merge or a rebase is like saving your game before you battle the boss.
+    ############################ #danger danger
+    # Reset to the last commit, discarding all changes
+    rh = reset --hard
+    # make your working directory look exactly the same as it was after the previous commit.
+    rh2 = reset --hard HEAD~1
+	# Fast-forward all local branches to match the latest state on the remote
+    sync = "!hub sync"
+    # Cancela una fusión en curso y revierte los cambios realizados durante la fusión
+    cancel-merge = !git merge --abort
+	# Fusiona la rama master con la rama actual, creando un commit de fusión incluso si no es necesario debido a que los cambios en master son directamente aplicables.
+	merge-master = !git merge --no-ff master
+	# busca un texto especifico en un archivo o en un mensaje de un commit
+	findcommit = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+	findmessage = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+    # These are extremely nice
+	ignore = "!f() { for arg in \"$@\"; do echo \"$arg\" >> .gitignore; done; git add .gitignore 2>/dev/null; }; f"
+	exclude = "!f() { for arg in \"$@\"; do echo \"$arg\" >> \"$(git rev-parse --git-path info/exclude)\"; done; }; f"
+    # The incantation to list ignored files is terrible
+    # (but maybe I should use git status --ignored?)
+	ignored = ls-files --others -i --exclude-standard
+    # I like hg incoming/hg outgoing; they make perfect sense to me
+    # NB: starting with git 1.7.0 I can use @{u} to refer to origin
+    # see also http://stackoverflow.com/questions/231211/using-git-how-do-i-find-modified-files-between-local-and-remote/6389348#6389348
+    # NB: starting with git 2.5.0 I can use @{push} to support triangular workflows (thanks Seveas from #git for the tip!)
+	outgoing = !git log --oneline $(git upstream)..
+	incoming = !git fetch && git log --oneline ..$(git upstream)
+	has-upstream = !git rev-parse @{u} >/dev/null 2>/dev/null
+	upstream = "!if git has-upstream; then echo '@{u}'; else git main-branch; fi"
+#*#### When you git pull and want to see what you've just pulled in, do git new [branch] [git log options]
+    # inspired by https://git.wiki.kernel.org/index.php/Aliases
+	new = "!f() { case \"$1\" in -*|\"\") b=;; *) b=$1; shift;; esac; git log $b@{1}..$b@{0} \"$@\"; }; f"
+    # show tag name of the last release tag on current branch
+	last-release = describe --tags --abbrev=0 --exclude=last*
+	penultimate-release = !git describe --tags --abbrev=0 --exclude=last* --exclude=$(git last-release)
+    # show commits after the last release
+	unreleased = !git shortlog $(git last-release)..
+	unreleased-log = !git log $(git last-release)..
+    # show diff since the last release
+	unreleased-diff = !git diff $(git last-release)
+    # show current commit SHA; try also git sha --short and git sha [--short] somebranch
+	sha = "!f() { rev=HEAD; for a; do case \"$a\" in -*) ;; *) rev=;; esac; done; git rev-parse \"$@\" $rev; }; f"
+    # let's do code review!
+	review = "!nvim +'set ft=diff bt=nofile|exe \"0r !git branch-diff -p --stat\"|1|exe \"silent file\" escape(printf(\"git diff of the %s branch\", systemlist(\"git branch-name\")[0]), \" |\\\\\")'"
+    # managing many git checkouts (these are great!)
+    # configure with git config alias.all.dirs '/foo /bar ~/baz*'
+    # extra sets configured with git config alias.all.FOO '...' and used with git all --FOO ...
+	all = "!f() { unset GIT_DIR GIT_WORK_TREE; w=dirs; case \"$1\" in --*) w=${1#--}; shift;; esac; c=$(tput setaf 5); r=$(tput sgr0); rc=0; for d in $(eval \"echo $(git config alias.all.$w)\"); do if [ -e $d/.git ]; then printf \"$c+ %s$r\\n\" \"$(printf %s $d|sed /^\\\\/root/!s,^$HOME,~,)\"; cd $d && git \"$@\" || rc=1; fi; done; exit $rc; }; f"
+	all-quiet = "!f() { unset GIT_DIR GIT_WORK_TREE; w=dirs; case \"$1\" in --*) w=${1#--}; shift;; esac; c=$(tput setaf 5); r=$(tput sgr0); rc=0; for d in $(eval \"echo $(git config alias.all.$w)\"); do if [ -e $d/.git ]; then prefix=\"$(printf \"$c+ %s$r\\n\" \"$(printf %s $d|sed /^\\\\/root/!s,^$HOME,~,)\")\"; cd $d && output=\"$(git \"$@\" 2>&1)\" || rc=1; test -z \"$output\" || printf %s \"$prefix\n$output\n\"; fi; done; exit $rc; }; f"
+	whatsmodified = !git wm
+	wm = "!f() { git all \"$@\" short-status-with-branch-info; }; f"
+	wmq = "!f() { git all-quiet \"$@\" short-status-with-branch-info; }; f"
+	wmqa = !git wmq --all
+	short-status-with-branch-info = "!f() { o=$(git -c color.status=always status -bsu --ignore-submodules=none \"$@\"); rc=$?; printf \"%s\" \"$o\" | grep -v '## [^ ]*$'; exit $rc; }; f"
+    # git amend [-a|-p|FILE] to just add something to the last commit
+    # (lately I've mostly been using git add [-p]; git show --staged; git amend)
+	amend = commit --amend --no-edit
+    # git reword -- edit the last commit message
+	reword = commit --amend --only -v
+    # git rename-current-branch NAME renames the current branch
+	rename-current-branch = branch -m
+    # git main-branch [name] -- get or set the name of the default branch (usually 'main' or 'master')
+    # used by other aliases such as 'git list-merged-branches' or 'git up'
+	main-branch = "!f() { git config alias.main-branch.name \"$@\" || for c in main master devel; do git show-ref --quiet --verify refs/heads/$c && echo $c && break; done || git config init.defaultBranch || echo master; }; f"
+# show me a diff of all the changes made on this branch (useful after git pr or git mr)
+# (I do not understand why diff needs the third dot and log absolutely cannot accept the third dot)
+	branch-diff = !git diff $(git main-branch)@{u}...
+	branch-log = !git log $(git main-branch)@{u}..
+    # show me a diff of all the changes made on this branch (useful after git pr or git mr)
+# (I do not understand why diff needs the third dot and log absolutely cannot accept the third dot)
+	branch-diff = !git diff $(git main-branch)@{u}...
+	branch-log = !git log $(git main-branch)@{u}..
+    ###########################################
+    mergeorigin = !"git merge origin/$(git mainormaster)"
+    	# Essentially GitHub's compare view: show all 'ahead' changes (incl working tree) vs the merge-base
+    	diffbranch = !"git diff  $(git diffbase)"
+    	# Diff of branch that's not checked out. Doesn't include working tree (but obv doesnt need to)
+    	diffbranch-that = !"git diff origin/$(git mainormaster)...\"$1\" #"
+    	# Show commit log of unique commits of this branch (not on main)
+    	diffcommitsfrommain = !"git log --no-merges origin/$(git mainormaster).."
+    	#                                                                      ^^ also, 2 vs 3 dots: so important. https://stackoverflow.com/a/48681527
+    	# Squash a branch to one commit against a branch with many non-main commits.
+    	# This can't be an alias, but here's the hack.
+    	#    # be on the new feature branch, be okay with rewriting it's history.
+    	#    git reset --soft (git merge-base Other_Branch_Name HEAD)
+    	# Two utils:
+    	#   What's the ancestor commit this branch shares with (the parent branch, or, more likely...) main?
+    	#   diffbase = !"git config --get branch.$(command git symbolic-ref --short HEAD).base || git merge-base origin/$(git mainormaster) HEAD"
+    	diffbase = !"git merge-base origin/$(git mainormaster) HEAD"
+    	#   Is it a `main` or a `master` repo?
+    	mainormaster = !"git branch --format '%(refname:short)' --sort=-committerdate --list master main | head -n1"
+    	# fyi to change a git checkout from master to main.. (gh's suggested commands:)
+    	#    git branch -m master main; git fetch origin; git branch -u origin/main main; git remote set-head origin -a
+    	# commit (past) WIP changes with a message stating when they happened. (Cuz I sometimes leave changes uncommitted for a while, but want the dates for reference)
+    	# todo: maybe use `git commit --date=X` to set a past date. would need to pick one, tho.
+    	commitwip = !"git commit -am \"WIP. Last modified on:\n$(( git diff --name-only --cached; git ls-files --modified ) | uniq | xargs gstat -c '- %.19y %N')\""
+    	# I'm curious about some of these git + fzf aliases...
+    	#   https://github.com/mattorb/dotfiles/blob/d16776eff48d831bcfaca58f1972e6b587f5dc28/git/.gitaliases#L89
+    	#   https://github.com/junegunn/fzf-git.sh
+    	#   https://brettterpstra.com/2021/11/25/git-better-with-fzf-and-fish/ and https://gist.github.com/aluxian/9c6f97557b7971c32fdff2f2b1da8209
+
+	### GIT TOWN ###
+	append = town append
+	compress = town compress
+	contribute = town contribute
+	diff-parent = town diff-parent
+	hack = town hack
+	kill = town kill
+	observe = town observe
+	park = town park
+	prepend = town prepend
+	propose = town propose
+	rename-branch = town rename-branch
+	repo = town repo
+	set-parent = town set-parent
+ 	tbranch= town switch
+	ship = town ship
+	sync = town sync

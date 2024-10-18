@@ -1,0 +1,461 @@
+###############################################################################
+
+# [init]
+
+# Configuración por defecto para la inicialización de nuevos repositorios
+
+###############################################################################
+
+[init]
+
+    defaultBranch = master           # Nombre de la rama por defecto al inicializar un nuevo repositorio
+
+
+
+###############################################################################
+
+# [advice]
+
+# Configuración de los mensajes de consejo de Git
+
+###############################################################################
+
+[advice]
+
+    detachedHead = false             # Deshabilitar el mensaje de advertencia para un HEAD separado
+
+###############################################################################
+
+# [interactive]
+
+# Configuración para la visualización de diferencias interactivas
+
+###############################################################################
+
+[interactive]
+
+    diffFilter = diff-so-fancy --patch  # Usa 'diff-so-fancy' para mostrar diferencias de manera más legible
+
+
+
+###############################################################################
+
+# [push]
+
+# Configuración para el comportamiento de los 'push'
+
+###############################################################################
+
+# Push the current branch and set the remote as upstream automatically
+
+[push]
+
+    autoSetupRemote = true   # Configura automáticamente el remoto como upstream
+
+    default = current        # Empuja la rama actual por defecto
+
+
+
+###############################################################################
+
+# [branch]
+
+# Configuración para las ramas
+
+###############################################################################
+
+[branch]
+
+    autosetupmerge = true    # Configura automáticamente el merge cuando se crea una nueva rama
+
+
+
+###############################################################################
+
+# [hub]
+
+# Configuración del protocolo para 'hub'
+
+###############################################################################
+
+[hub]
+
+    protocol = ssh           # Usa SSH para 'hub'
+
+
+
+###############################################################################
+
+# [github]
+
+# Configuración específica para GitHub
+
+###############################################################################
+
+[github]
+
+    user = FQ211776          # Nombre de usuario de GitHub
+
+
+
+###############################################################################
+
+# [diff]
+
+# Configuración de la herramienta para mostrar diferencias
+
+###############################################################################
+
+# Use neovim as git diff and merge tool
+
+[diff]
+
+	tool = meld
+
+# [diff]
+
+#   tool = nvimdiff          # Alternativa: usa 'nvimdiff' (comentado)
+
+[difftool]
+
+    prompt = false           # No pide confirmación antes de iniciar la herramienta de diferencias
+
+#[difftool "nvimdiff"]
+
+#    cmd = nvim -d \"$LOCAL\" \"$REMOTE\"  # Comando para 'nvimdiff' (comentado)
+
+#    path =
+
+
+
+###############################################################################
+
+# [merge]
+
+# Configuración de la herramienta de merge
+
+###############################################################################
+
+[merge]
+
+    tool = meld              # Usa 'meld' como herramienta de merge
+
+    log = true               # Registra el historial de merges
+
+# [merge]
+
+#    tool = nvimdiff         # Alternativa: usa 'nvimdiff' (comentado)
+
+[mergetool]
+
+    prompt = true            # Pide confirmación antes de iniciar la herramienta de merge
+
+#[mergetool "nvimdiff"]
+
+#    cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"  # Comando para 'nvimdiff' (comentado)
+
+#    trustExitCode = true
+
+
+
+###############################################################################
+
+# [tag]
+
+# Configuración para etiquetas
+
+###############################################################################
+
+[tag]
+
+    forceSignAnnotated = true  # Fuerza la firma de etiquetas anotadas
+
+
+
+###############################################################################
+
+# [apply]
+
+# Configuración para la aplicación de parches
+
+###############################################################################
+
+[apply]
+
+    whitespace = warn         # Detecta errores de espacios en blanco al aplicar un parche
+
+
+
+
+
+
+###############################################################################
+
+# [gpg]
+
+# Configuración del programa GPG
+
+###############################################################################
+
+[gpg]
+
+    program = /usr/bin/gpg   # Ruta al programa GPG en sistemas Unix
+
+#    program = C:\\Program Files\\Git\\usr\\bin\\gpg.exe  # Ruta al programa GPG en Windows (comentado)
+
+
+
+###############################################################################
+
+# [fetch]
+
+# Configuración para la obtención de datos (fetch)
+
+###############################################################################
+
+[fetch]
+
+    prune = true             # Elimina referencias remotas eliminadas
+
+
+
+###############################################################################
+
+# [core]
+
+# Configuraciones básicas de Git
+
+###############################################################################
+
+[core]
+
+    editor = nvim            # Usa 'nvim' como editor por defecto
+
+    longpaths = true         # Permite rutas largas en Windows
+
+    pager = diff-so-fancy | less --tabs=4 -RFX  # Configuración del paginador para diffs
+
+    excludesfile = ~/.gitignore         # Archivo global de exclusiones
+
+    attributesfile = ~/.gitattributes   # Archivo global de atributos
+
+    whitespace = space-before-tab,tab-in-indent,trailing-space,tabwidth=4  # Configuración de errores de espacios en blanco
+
+    untrackedCache = true    # Acelera comandos que involucran archivos no rastreados
+
+
+
+###############################################################################
+
+# [url]
+
+# Configuración de URL cortas
+
+###############################################################################
+
+[url "https://github.com/"]
+
+    insteadOf = git@github.com:
+
+[url "https://"]
+
+    insteadOf = git://
+
+# URL shorthands
+
+[url "git@github.com:"]
+
+    insteadOf = "gh:"
+
+    pushInsteadOf = "github:"
+
+    pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+
+    insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+
+    insteadOf = "gst:"
+
+    pushInsteadOf = "gist:"
+
+    pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+
+    insteadOf = "gist:"
+
+
+
+###############################################################################
+
+# [filter "lfs"]
+
+# Configuración para Git LFS (Large File Storage)
+
+###############################################################################
+
+[filter "lfs"]
+
+    clean = git-lfs clean -- %f
+
+    smudge = git-lfs smudge -- %f
+
+    required = true
+
+    process = git-lfs filter-process
+
+
+
+###############################################################################
+
+# [color]
+
+# Configuración de colores para la salida de comandos de Git
+
+###############################################################################
+
+[color]
+
+    ui = true                # Usa colores en los comandos de Git
+
+[color "branch"]
+
+    current = yellow reverse
+
+    local = yellow
+
+    remote = green
+
+[color "diff-highlight"]
+
+    oldNormal = red bold
+
+    oldHighlight = red bold 52
+
+    newNormal = green bold
+
+    newHighlight = green bold 22
+
+[color "status"]
+
+    added = yellow
+
+    changed = green
+
+    untracked = cyan
+
+    branch = magenta
+
+[color "diff"]
+
+    meta = 11
+
+    frag = magenta bold
+
+    func = 146 bold
+
+    commit = yellow bold
+
+    old = red bold
+
+    new = green bold
+
+    whitespace = red reverse
+
+
+
+
+    [delta]
+
+    	max-line-length = 700
+
+    	# max-line-distance = 0.3 # better word-diff?
+
+    	syntax-theme = base16
+
+    	hyperlinks = true # i filed https://github.com/dandavison/delta/issues/362 but in 2022 i can't see brokenness in the issue nor repro weirdness. but i installed latest `less` anyway
+
+    	                  # oh i found it. it doubles up the sha and adds some `8;;` at the end.
+
+    					  # to fix.... install latest less (`less -V` should be >= v570). shouldn't need to set DELTA_PAGER.
+
+    	# line-numbers = true # seems nice until you want to copypaste and they're there…
+
+    	# navigate = true # eh. not great with short diffs.
+
+
+
+    	file-style = bold yellow ul
+
+    	file-decoration-style = yellow ol ul
+
+    	hunk-header-decoration-style = blue
+
+    	hunk-header-line-number-style = purple bold
+
+
+
+    [interactive]
+
+    	diffFilter = delta --color-only --features=interactive
+
+
+
+    [diff]
+
+    	# Show blocks of moved text of at least 20 alphanumeric characters differently than adds/deletes
+
+    	# https://blog.github.com/2018-04-05-git-217-released/
+
+    	colorMoved = default
+
+    	# Detect copies in addition to renames
+
+    	renames = copies
+
+    	# A la `git submodule summary`
+
+    	submodule = log
+
+
+
+
+
+
+
+
+
+
+
+    # push easily. http://stackoverflow.com/a/23918418/89484
+
+    [push]
+
+    	default = current
+
+    	followTags = true
+
+    	autoSetupRemote = true
+
+   [checkout]
+
+    	defaultRemote = origin
+
+
+
+
+[pull]
+	ff = true
+	rebase = true
+
+[include]
+	path = ~/.gitconfig-local
+	path = ~/.gitconfig-local-signingkey
+    path = ~/.gitconfig-alias
+    path = ~/.gitconfig-alias-depurado
+    path = ~/.gitconfig-config-depurado
+[credential]
+	helper = cache --timeout 86400

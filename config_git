@@ -1,0 +1,420 @@
+#!/bin/bash
+
+# para ejecutarlo directamente desde la terminal
+# sh -c "$(curl -s ***)"
+
+CRE=$(tput setaf 1)
+CYE=$(tput setaf 3)
+CGR=$(tput setaf 2)
+CBL=$(tput setaf 4)
+BLD=$(tput bold)
+CNC=$(tput sgr0)
+
+function color_echo() {
+    local text=""
+    local bold=0  # Usamos 0 para "no negrita" y 1 para "negrita"
+
+    for arg in "$@"; do
+        case $arg in
+            -b|--bold)   bold=1 ;;
+            -rb|--reset-bold) bold=0 ;;
+            -c|--cyan)       text+="\033[${bold};96m" ;; # Cyan (bold opcional)
+            -m|--magenta)    text+="\033[${bold};95m" ;; # Magenta (bold opcional)
+            -g|--green)      text+="\033[${bold};92m" ;; # Green (bold opcional)
+            -r|--red)        text+="\033[${bold};91m" ;; # Red brillante (mejor contraste)
+            -y|--yellow)     text+="\033[${bold};93m" ;; # Yellow (bold opcional)
+            -bl|--blue)      text+="\033[${bold};94m" ;; # Blue (bold opcional)
+            -w|--white)      text+="\033[${bold};97m" ;; # White (bold opcional)
+            -o|--orange)     text+="\033[${bold};38;5;208m" ;; # Orange brillante (256 colores)
+            -p|--purple)     text+="\033[${bold};38;5;93m" ;; # Purple (256 colores)
+            *) text+="$arg " ;; # Texto normal
+        esac
+    done
+
+    echo -e "$text\033[0m" # Restablecer estilo y color al final
+
+}
+backup_folder=~/.git_Backup
+date=$(date +%Y%m%d-%H%M%S)
+
+title() {
+
+  local text="${1:?}"
+  printf ' %s [%s%s %s%s %s]%s\n\n' "${CRE}" "${CNC}" "${CYE}" "${text}" "${CNC}" "${CRE}" "${CNC}"
+}
+
+check_gum() {
+  if ! command -v gum &>/dev/null; then  # Verifica si gum NO está instalado
+    if sudo pacman -S --noconfirm gum; then  # Intenta instalar con pacman
+      color_echo -b -g "gum" -w "installed" -o "successfully"
+    else
+      echo "pacman -S gum FAILED" # Si falla, muestra un mensaje de error
+    fi
+  fi
+}
+
+
+copy_gitfiles(){
+########## ---------- You must not run this as root ---------- ##########
+
+if [ "$(id -u)" = 0 ]; then
+    echo "This script MUST NOT be run as root user."
+    exit 1
+fi
+
+home_dir=$HOME
+current_dir=$(pwd)
+
+if [ "$current_dir" != "$home_dir" ]; then
+    printf "%s%sThe script must be executed from the HOME directory.%s\n" "${BLD}" "${CYE}" "${CNC}"
+    exit 1
+fi
+sleep 10
+
+########## ---------- Cloning the Rice! ---------- ##########
+
+logo "Downloading git_files"
+
+
+repo_url="https://github.com/Elixir-Software-Developer/git_config.git"
+repo_dir="$HOME/git_files"
+
+# Verifies if the folder of the repository exists, and if it does, deletes it
+if [ -d "$repo_dir" ]; then
+    printf "Removing existing git_files repository\n"
+    rm -rf "$repo_dir"
+fi
+
+# Clone the repository
+printf "Cloning dotfiles from %s\n" "$repo_url"
+git clone --depth=1 "$repo_url" "$repo_dir"
+sleep 10
+clear
+
+########## ---------- Backup files ---------- ##########
+
+if [ -f ~/.gitconfig-local ]; then
+    if mv ~/.gitconfig-local "$backup_folder"/.gitconfig-local_"$date" 2>> RiceError.log; then
+        printf "%s%s.gitconfig-local file backed up successfully at %s%s/.gitconfig-local_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
+    else
+        printf "%s%sFailed to backup .gitconfig-local file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+    fi
+else
+    printf "%s%sThe file .gitconfig-local does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
+fi
+
+if [ -f ~/.git-flow-completion.zsh ]; then
+    if mv ~/.git-flow-completion.zsh "$backup_folder"/.git-flow-completion.zsh_"$date" 2>> RiceError.log; then
+        printf "%s%s.git-flow-completion.zsh file backed up successfully at %s%s/.git-flow-completion.zsh_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
+    else
+        printf "%s%sFailed to backup .git-flow-completion.zsh file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+    fi
+else
+    printf "%s%sThe file .git-flow-completion.zsh does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
+fi
+
+if [ -f ~/.czrc ]; then
+    if mv ~/.czrc "$backup_folder"/.czrc_"$date" 2>> RiceError.log; then
+        printf "%s%s.czrc file backed up successfully at %s%s/.czrc_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
+    else
+        printf "%s%sFailed to backup .czrc file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+    fi
+else
+    printf "%s%sThe file .czrc does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
+fi
+
+if [ -f ~/.gitconfig ]; then
+    if mv ~/.gitconfig "$backup_folder"/.gitconfig_"$date" 2>> RiceError.log; then
+        printf "%s%s.gitconfig file backed up successfully at %s%s/.gitconfig_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
+    else
+        printf "%s%sFailed to backup .gitconfig file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+    fi
+else
+    printf "%s%sThe file .gitconfig does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
+fi
+
+if [ -f ~/.gitconfig-alias ]; then
+    if mv ~/.gitconfig-alias "$backup_folder"/.gitconfig-alias_"$date" 2>> RiceError.log; then
+        printf "%s%s.gitconfig-alias file backed up successfully at %s%s/.gitconfig-alias_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
+    else
+        printf "%s%sFailed to backup .gitconfig-alias file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+    fi
+else
+    printf "%s%sThe file .gitconfig-alias does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
+fi
+
+if [ -f ~/.gitconfig-config-depurado ]; then
+    if mv ~/.gitconfig-config-depurado "$backup_folder"/.gitconfig-config-depurado_"$date" 2>> RiceError.log; then
+        printf "%s%s.gitconfig-config-depurado file backed up successfully at %s%s/.zshrc_%s%s\n" "${BLD}" "${CGR}" "${CBL}" "$backup_folder" "${date}" "${CNC}"
+    else
+        printf "%s%sFailed to backup .zshrc file. See %sRiceError.log%s\n" "${BLD}" "${CRE}" "${CBL}" "${CNC}"
+    fi
+else
+    printf "%s%sThe file .zshrc does not exist, %sno backup needed%s\n" "${BLD}" "${CGR}" "${CYE}" "${CNC}"
+fi
+
+
+########## ---------- Copy the git_files! ---------- ##########
+
+if cp -R "$HOME/git_files/home/*" "$HOME" 2>> RiceError.log; then
+    printf "%s%sGit config files %scopied succesfully!%s\n" "${BLD}" "${CYE}" "${CGR}" "${CNC}"
+    sleep 1
+else
+    printf "%s%sGit config files %sfailed to been copied, see %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+    sleep 1
+fi
+
+
+
+
+}
+
+
+
+
+
+
+
+gpg_agent_conf(){
+#
+# https://superuser.com/questions/520980/how-to-force-gpg-to-use-console-mode-pinentry-to-prompt-for-passwords
+
+	title "creando archvivo gpg-agent-conf"
+
+  mkdir -p ~/.gnupg
+  file="~/.gnupg/gpg-agent.conf"
+  if [ -f "$file" ] ; then
+    rm "$file"
+  fi
+
+echo "options available for pinentry"
+ ls /usr/bin | grep pinentry
+ echo ""
+ echo "/usr/bin/pinentry-gnome3 will be used"
+
+cat <<EOF >~/.gnupg/gpg-agent.conf
+pinentry-program /usr/bin/pinentry-gnome3
+EOF
+
+  title "creando archivo .gitconfig"
+
+
+  mkdir -p ~/.gnupg
+  file="~/.gitconfig"
+  if [ -f "$file" ] ; then
+    mv "$file" "$file"-backup
+  fi
+
+cat <<EOF >~/.gitconfig
+[include]
+	path = ~/.gitconfig-local
+	path = ~/.gitconfig-local-signingkey
+EOF
+
+
+
+}
+
+
+
+# Function to display the menu
+Instalar_paquetes_adicionales() {
+
+  title "Instando: git github-cli hub diff-so-fancy gum dialog"
+
+  dependencias=(git github-cli hub diff-so-fancy gum dialog)
+
+  is_installed() {
+    pacman -Q "$1" &>/dev/null
+  }
+
+  printf "%s%sChecking for required packages...%s\n" "${BLD}" "${CBL}" "${CNC}"
+  for paquete in "${dependencias[@]}"; do
+    if ! is_installed "$paquete"; then
+      if sudo pacman -S "$paquete" --noconfirm >/dev/null 2>>RiceError.log; then
+        printf "%s%s%s %shas been installed succesfully.%s\n" "${BLD}" "${CYE}" "$paquete" "${CBL}" "${CNC}"
+        sleep 1
+      else
+        printf "%s%s%s %shas not been installed correctly. See %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "$paquete" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+        sleep 1
+      fi
+    else
+      printf '%s%s%s %sis already installed on your system!%s\n' "${BLD}" "${CYE}" "$paquete" "${CGR}" "${CNC}"
+      sleep 1
+    fi
+  done
+
+  sleep 2
+  clear
+
+}
+
+
+
+Configurar_ssh() {
+   title "configurando llave ssh en github"
+   gh auth login
+}
+
+
+
+
+setup_user_info(){
+title "configurando nombre completo, usuario de github y correo en .gitconfig-local"
+  defaultName=$(git config user.name)
+  defaultEmail=$(git config user.email)
+  defaultGithub=$(git config github.user)
+
+  read -rp "Name [$defaultName] " name
+  read -rp "Email [$defaultEmail] " email
+  read -rp "Github username [$defaultGithub] " github
+
+  git config -f ~/.gitconfig-local user.name "${name:-$defaultName}"
+  git config -f ~/.gitconfig-local user.email "${email:-$defaultEmail}"
+  git config -f ~/.gitconfig-local github.user "${github:-$defaultGithub}"
+
+
+}
+
+
+setup_gpg() {
+  title "configurando llave GPG en github"
+  gpg --gen-key
+  defaultGpgKey=$(gpg --list-secret-keys --keyid-format LONG | grep "^sec" | cut -d "/" -f 2 | cut -d " " -f 1)
+  echo $defaultGpgKey
+
+  git config -f ~/.gitconfig-local-signingkey user.signingkey "${signingkey:-$defaultGpgKey}"
+  gpg --armor --export $defaultGpgKey | gh gpg-key add -
+
+
+  if [[ "$(uname)" == "Darwin" ]]; then
+    git config --global credential.helper "osxkeychain"
+  else
+    read -rn 1 -p "Save user and password to an unencrypted file to avoid writing? [y/N] " save
+    if [[ $save =~ ^([Yy])$ ]]; then
+      git config --global credential.helper "store"
+    else
+      git config --global credential.helper "cache --timeout 86400"
+    fi
+  fi
+
+
+  rm -rf ~/test && mkdir ~/test && cd ~/test && git init && echo "test" >>test && git add test && git commit -m "test" && git log --show-signature && cd .. && rm -rf
+}
+
+
+
+Clone_gitconfig() {
+  ########## ---------- Cloning the Rice! ---------- ##########
+
+  repo_dir="$HOME/my-dev-branch"
+
+  # Verifies if the folder of the repository exists, and if it does, deletes it
+  if [ -d "$repo_dir" ]; then
+    printf "Removing existing dotfiles repository\n"
+    rm -rf "$repo_dir"
+  fi
+
+  # Clone the repository
+  # TODO hacer que la instalacion sea con curl sin clonar el repositorio
+  printf "Cloning dotfiles from %s\n" "$repo_url"
+  git clone --depth=1 -b my-dev-branch git@github.com:FQ211776/dotfiles_arch.git "$HOME"/my-dev-branch
+  cp -f "$HOME"/my-dev-branch/custom/home/.gitconfig "$HOME"
+  sleep 2
+  clear
+
+  ########## ---------- Preparing Folders ---------- ##########
+
+  # Verifies if the archive user-dirs.dirs doesn't exist in ~/.config
+  if [ ! -e "$HOME/.config/user-dirs.dirs" ]; then
+    xdg-user-dirs-update
+  fi
+
+}
+
+
+
+split_gitconfig() {
+  #https://filipe.kiss.ink/multiple-gpg-keys-git/
+
+  title "dividiendo .gitconfig en dos arhchivos, una para compartir en github y el otro para tenerlo privado en local"
+
+  git config --get meta.isLocalConfig
+  git config -f ~/.gitconfig-local meta.isLocalConfig true
+  git config --global include.path "~/.gitconfig-local"
+  git config --get meta.isLocalConfig
+}
+
+manual_gpg(){
+  title "will be show yout PGP KEY so you can copy and paste manually"
+  gpg --pinentry-mode loopback --export-secret-keys -a | less
+}
+Configurar_todo(){
+    gpg_agent_conf
+    Instalar_paquetes_adicionales
+    Configurar_ssh
+    setup_user_info
+    setup_gpg
+    split_gitconfig
+
+}
+
+
+display_menu() {
+  clear
+  gum style --foreground 121 --border double --padding "1 1" --margin "1 1" --align center "Robert Dotfiles"
+  color_echo -b -g "This module will configure Git."
+  echo
+  color_echo -b -y "Hello" -b -c "$USER," -b -y "please select an option. Press 'i' for the Wiki."
+  echo
+  color_echo -b -r "      1." -g "    Creating " -o "gpg-agent-conf" -g "file, necessary for adding GPG"
+  color_echo -b -r "      2." -g "    Installing basic packages for" -o "git" "functionality"
+  color_echo -b -r "      3." -g "    Configuring" -o "SSH"
+  color_echo -b -r "      4." -g "    Configuring user information in" -o ".gitconfig-local"
+  color_echo -b -r "      5." -g "    Configuring" -o "GPG"
+  color_echo -b -r "      6." -g "    Displaying" -o "GPG" -g "to manually copy"
+  color_echo -b -r "      7." -g "    Splitting" -o ".gitconfig" -g "- not necessary if step 1 is done"
+  color_echo -b -r "      8." -g "    Performing" -o "complete configuration" -g " covering all previous steps sequentially"
+  color_echo -b -r "      9." -g "    Configuring" -o "Github CLI"
+  color_echo -b -r "      q." -g "    Exit"
+  echo
+  color_echo -b -bl "Type your selection or " -o "'q'" -b -bl " to exit."
+}
+
+Configurar_gh(){
+	gh auth refresh -s write:gpg_key
+}
+
+mantis() {
+
+  check_gum
+  while :; do
+    display_menu
+    read -rp "Enter your choice: " CHOICE
+    echo
+
+    case $CHOICE in
+    0) copy_gitfiles ;;
+    1) gpg_agent_conf ;;
+    2) Instalar_paquetes_adicionales ;;
+    3) Configurar_ssh ;;
+    4) setup_user_info ;;
+    5) setup_gpg ;;
+    6) manual_gpg ;;
+    7) split_gitconfig ;;
+    8) Configurar_todo ;;
+    9) Configurar_gh ;;
+    q) clear && exit ;;
+    *)
+      gum style --foreground 50 "Invalid choice. Please select a valid option."
+      echotest
+      ;;
+    esac
+    sleep 1
+  done
+
+  exit
+
+}
+
+mantis
