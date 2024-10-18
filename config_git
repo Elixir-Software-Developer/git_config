@@ -99,7 +99,6 @@ fi
 # Clone the repository
 printf "Cloning dotfiles from %s\n" "$repo_url"
 git clone --depth=1 "$repo_url" "$repo_dir"
-sleep 10
 clear
 
 ########## ---------- Backup files ---------- ##########
@@ -172,11 +171,11 @@ cp -fv "$HOME"/git_files/home/.czrc "$HOME"
 cp -fv "$HOME"/git_files/home/.gitconfig "$HOME"
 cp -fv "$HOME"/git_files/home/.gitconfig-alias "$HOME"
 cp -fv "$HOME"/git_files/home/.gitconfig-config-depurado "$HOME"
-cp -fv "$HOME"/git_files/home/.gitconfig-local"$HOME"
+cp -fv "$HOME"/git_files/home/.gitconfig-local "$HOME"
 cp -fv "$HOME"/git_files/home/.git-flow-completion.zsh "$HOME"
 
 printf "\n\n%s%sFiles copied succesfully!!%s\n" "${BLD}" "${CGR}" "${CNC}"
-sleep 5
+sleep 10
 
 }
 
@@ -378,6 +377,7 @@ display_menu() {
   echo
   color_echo -b -y "Hello" -b -c "$USER," -b -y "please select an option. Press 'i' for the Wiki."
   echo
+  color_echo -b -r "      0." -g "    Coping" -o "Git config files"
   color_echo -b -r "      1." -g "    Creating " -o "gpg-agent-conf" -g "file, necessary for adding GPG"
   color_echo -b -r "      2." -g "    Installing basic packages for" -o "git" "functionality"
   color_echo -b -r "      3." -g "    Configuring" -o "SSH"
