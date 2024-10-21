@@ -1,6 +1,7 @@
 # -- Alias ------------------------------------------------------------------
 # Definición de alias para simplificar comandos de Git
 [alias]
+    pullo = !git pull origin master
     # Switch to a branch, creating it if necessary
     go = checkout -B
     # Switch to a branch, only if it exists
