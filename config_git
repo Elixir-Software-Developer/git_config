@@ -209,7 +209,7 @@ EOF
   # title "creando archivo .gitconfig"
 
 
-  mkdir -p ~/.gnupg
+  # mkdir -p ~/.gnupg
 #   file="~/.gitconfig"
 #   if [ -f "$file" ] ; then
 #     mv "$file" "$file"-backup
