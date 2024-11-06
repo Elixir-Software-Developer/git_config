@@ -360,8 +360,8 @@ manual_gpg(){
   gpg --pinentry-mode loopback --export-secret-keys -a | less
 }
 Configurar_todo(){
-    copy_gitfiles
     gpg_agent_conf
+    copy_gitfiles
     Instalar_paquetes_adicionales
     Configurar_ssh
     setup_user_info
