@@ -210,16 +210,16 @@ EOF
 
 
   mkdir -p ~/.gnupg
-  file="~/.gitconfig"
-  if [ -f "$file" ] ; then
-    mv "$file" "$file"-backup
-  fi
+#   file="~/.gitconfig"
+#   if [ -f "$file" ] ; then
+#     mv "$file" "$file"-backup
+#   fi
 
-cat <<EOF >~/.gitconfig
-[include]
-	path = ~/.gitconfig-local
-	path = ~/.gitconfig-local-signingkey
-EOF
+# # cat <<EOF >~/.gitconfig
+# # [include]
+# # 	path = ~/.gitconfig-local
+# # 	path = ~/.gitconfig-local-signingkey
+# # EOF
 
 
 
