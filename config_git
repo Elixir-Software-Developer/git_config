@@ -206,7 +206,7 @@ cat <<EOF >~/.gnupg/gpg-agent.conf
 pinentry-program /usr/bin/pinentry-gnome3
 EOF
 
-  title "creando archivo .gitconfig"
+  # title "creando archivo .gitconfig"
 
 
   mkdir -p ~/.gnupg
