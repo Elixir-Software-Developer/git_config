@@ -230,7 +230,7 @@ EOF
 # Function to display the menu
 Instalar_paquetes_adicionales() {
 
-  title "Instando: git github-cli hub diff-so-fancy gum dialog"
+  title "Instando: git github-cli hub diff-so-fancy gum dialog ruby-coderay git-delta"
 
   dependencias=(git github-cli hub diff-so-fancy gum dialog)
 
