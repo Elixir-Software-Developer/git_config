@@ -360,13 +360,12 @@ manual_gpg(){
   gpg --pinentry-mode loopback --export-secret-keys -a | less
 }
 Configurar_todo(){
+    copy_gitfiles
     gpg_agent_conf
     Instalar_paquetes_adicionales
     Configurar_ssh
     setup_user_info
     setup_gpg
-    split_gitconfig
-
 }
 
 
@@ -384,9 +383,9 @@ display_menu() {
   color_echo -b -r "      4." -g "    Configuring user information in" -o ".gitconfig-local"
   color_echo -b -r "      5." -g "    Configuring" -o "GPG"
   color_echo -b -r "      6." -g "    Displaying" -o "GPG" -g "to manually copy"
-  color_echo -b -r "      7." -g "    Splitting" -o ".gitconfig" -g "- not necessary if step 1 is done"
-  color_echo -b -r "      8." -g "    Performing" -o "complete configuration" -g " covering all previous steps sequentially"
-  color_echo -b -r "      9." -g "    Configuring" -o "Github CLI"
+
+  color_echo -b -r "      7." -g "    Performing" -o "complete configuration" -g " covering all previous steps sequentially"
+  
   color_echo -b -r "      q." -g "    Exit"
   echo
   color_echo -b -bl "Type your selection or " -o "'q'" -b -bl " to exit."
@@ -412,9 +411,9 @@ mantis() {
     4) setup_user_info ;;
     5) setup_gpg ;;
     6) manual_gpg ;;
-    7) split_gitconfig ;;
-    8) Configurar_todo ;;
-    9) Configurar_gh ;;
+    # 7) split_gitconfig ;;
+    7) Configurar_todo ;;
+    # 9) Configurar_gh ;;
     q) clear && exit ;;
     *)
       gum style --foreground 50 "Invalid choice. Please select a valid option."
